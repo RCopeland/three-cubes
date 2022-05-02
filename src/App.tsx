@@ -1,36 +1,29 @@
-import React, { useRef, useState } from "react";
-import THREE from "three";
-import { useThree, MeshProps, useFrame } from "@react-three/fiber";
+import React, { useState } from "react";
+import { useThree, MeshProps } from "@react-three/fiber";
 import { useSpring, animated } from "@react-spring/three";
-
-// export interface BoxProps {
-//   rotate?: boolean;
-//   scale?: number;
-// }
 
 const Box = (props: any) => {
   const state = useThree();
-  const [active, setActive] = useState(false);
-  const { scale } = useSpring({ scale: active ? 1.5 : 1 });
-  const ref = useRef<THREE.Mesh | null>(null);
-
-  useFrame(() => {
-    if (!ref.current || !props.rotate) return;
-    ref.current.rotation.y += Math.random() * 0.02;
+  const [active, setActive] = useState(true);
+  const { spring } = useSpring({
+    spring: active ? 1 : 0,
+    config: { mass: 5, tension: 400, friction: 150, precision: 0.0001 },
   });
 
-  state.camera.position.z = 15;
+  const rotation = spring.to([0, 1], [0, Math.PI * 2]);
+
+  state.camera.position.z = 10;
 
   return (
     <animated.mesh
       {...props}
-      ref={ref}
+      rotation-y={rotation}
       onClick={() => {
-        setActive(true);
+        setActive(!active);
       }}
     >
       <boxGeometry args={[3, 3, 3]} />
-      <meshStandardMaterial color={"lightblue"} />
+      <meshStandardMaterial color={active ? "hotpink" : "lightblue"} />
     </animated.mesh>
   );
 };
@@ -40,9 +33,9 @@ function App() {
     <>
       <ambientLight />
       <pointLight position={[0, 10, 10]} />
-      <Box position={[-6, 0, 0]} rotation={[0, -2, 0]} />
-      <Box position={[0, 0, 0]} rotation={[0, 0, 0]} rotate />
-      <Box position={[6, 0, 0]} rotation={[0, 2, 0]} />
+      <Box position={[-6, 0, 0]} />
+      <Box position={[0, 0, 0]} />
+      <Box position={[6, 0, 0]} />
     </>
   );
 }
