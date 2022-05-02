@@ -1,25 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useRef, useState } from "react";
+import THREE from "three";
+import { useThree, MeshProps, useFrame } from "@react-three/fiber";
+import { useSpring, animated } from "@react-spring/three";
+
+// export interface BoxProps {
+//   rotate?: boolean;
+//   scale?: number;
+// }
+
+const Box = (props: any) => {
+  const state = useThree();
+  const [active, setActive] = useState(false);
+  const { scale } = useSpring({ scale: active ? 1.5 : 1 });
+  const ref = useRef<THREE.Mesh | null>(null);
+
+  useFrame(() => {
+    if (!ref.current || !props.rotate) return;
+    ref.current.rotation.y += Math.random() * 0.02;
+  });
+
+  state.camera.position.z = 15;
+
+  return (
+    <animated.mesh
+      {...props}
+      ref={ref}
+      onClick={() => {
+        setActive(true);
+      }}
+    >
+      <boxGeometry args={[3, 3, 3]} />
+      <meshStandardMaterial color={"lightblue"} />
+    </animated.mesh>
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ambientLight />
+      <pointLight position={[0, 10, 10]} />
+      <Box position={[-6, 0, 0]} rotation={[0, -2, 0]} />
+      <Box position={[0, 0, 0]} rotation={[0, 0, 0]} rotate />
+      <Box position={[6, 0, 0]} rotation={[0, 2, 0]} />
+    </>
   );
 }
 
