@@ -23,7 +23,7 @@ const Box = (props: any) => {
       }}
     >
       <boxGeometry args={[3, 3, 3]} />
-      <meshStandardMaterial color={active ? "hotpink" : "lightblue"} />
+      <meshStandardMaterial wireframe color={active ? "#FF94E2" : "#FFFFFF"} />
     </animated.mesh>
   );
 };
