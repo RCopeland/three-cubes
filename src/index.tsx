@@ -11,7 +11,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <div className="h-full w-full">
+    <div className="h-2/3 w-full">
       <Canvas shadows>
         <App />
         <EffectComposer>

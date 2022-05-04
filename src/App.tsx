@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useThree, MeshProps } from "@react-three/fiber";
-import { useSpring, animated } from "@react-spring/three";
+import { MeshProps, useThree } from "@react-three/fiber";
+import { useSpring, animated, AnimatedProps } from "@react-spring/three";
 
-const Box = (props: any) => {
+const Box = (props: AnimatedProps<MeshProps>) => {
   const state = useThree();
   const [active, setActive] = useState(true);
   const { spring } = useSpring({
